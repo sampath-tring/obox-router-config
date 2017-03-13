@@ -2,19 +2,19 @@
 A python script to configure obox router.
 
 #IP Address:
-block :
+#block :
     python obox_router_configure.py --ip <your_ipaddress> --b
-unblock:
+#unblock:
     python obox_router_configure.py --ip <your_ipaddress>
     
 #MAC Address:
-block :
+#block :
     python obox_router_configure.py --mac <your_macaddress> --b
-unblock :
+#unblock :
     python obox_router_configure.py --mac <your_macaddress>
     
 #URL:
-block :
+#block :
     python obox_router_configure.py --url <your_url> --b
-unblock :    
+#unblock :    
     python obox_router_configure.py --url <your_url>
