@@ -1,10 +1,26 @@
 import os
+import argparse
 
 MAC_ADDRESS_LIST = []
 
 IP_ADDRESS_LIST = []
 
 URL_LIST = []
+
+#getting ipaddress, macaddress, url
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-ip', '--ip', help="IP address", required=False)
+parser.add_argument('-mac', '--mac', help="MAC address", required=False)
+parser.add_argument('-url', '--url', help="URL", required=False)
+parser.add_argument('-b', '--b', help="block", required=False, action='store_true')
+parser.add_argument('-device_details', '--device_details', help="lisout existing device", required=False)
+arguments = parser.parse_args()
+
+ip_address = arguments.ip
+mac_address = arguments.mac
+url = arguments.url
+block =arguments.b
 
 def ip_address_blocker_and_unblocker(ip_address, block=None):
     if block:
@@ -44,4 +60,11 @@ def url_blocker_and_unblocker(url, block=None):
         command_executer = os.system(save_command)   
 
 
+if __name__ == "__main__":
+    if ip_address:
+        ip_address_blocker_and_unblocker(ip_address, block)
+    elif mac_address:
+        mac_id_blocker_and_unblocker(mac_address, block)
+    if url:
+        url_blocker_and_unblocker(url, block)        
 
