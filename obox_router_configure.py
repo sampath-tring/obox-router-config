@@ -32,9 +32,10 @@ def ip_address_blocker_and_unblocker(ip_address, block=None):
         command_executer = os.system(save_command)
     else:
         unblock_command = "iptables -D INPUT -s %s -j DROP" % (ip_address)
-        command_executer = os.system(command)
+        command_executer = os.system(unblock_command)
         save_command = "service iptables save"
-        command_executer = os.system(save_command)        
+        command_executer = os.system(save_command)   
+        print "Device %d unblocked" % (ip_address)     
 
 def mac_id_blocker_and_unblocker(mac_address, block=None):
     if block:
