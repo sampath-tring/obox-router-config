@@ -1,6 +1,8 @@
 import os
 import argparse
 import subprocess
+from commands import ip_block_command as ibc, ip_unblock_command as inc, mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, url_unblock_command as uuc
+from termcolor import colored
 
 MAC_ADDRESS_LIST = []
 
@@ -26,28 +28,31 @@ device_details = arguments.details
 
 def ip_address_blocker_and_unblocker(ip_address, block=None):
     if block:
-        block_command = "iptables -A INPUT -s %s -j DROP" % (ip_address)
+        block_command = ibc % (ip_address)
         command_executer = os.system(block_command)
         save_command = "service iptables save"
         command_executer = os.system(save_command)
+        print colored("Device %s is blocked" % (ip_address), 'red')
     else:
         unblock_command = "iptables -D INPUT -s %s -j DROP" % (ip_address)
         command_executer = os.system(unblock_command)
         save_command = "service iptables save"
         command_executer = os.system(save_command)   
-        print "Device %d unblocked" % (ip_address)     
+        print colored("Device %s is unblocked" % (ip_address), 'blue')     
 
 def mac_id_blocker_and_unblocker(mac_address, block=None):
     if block:
-        block_command = "iptables -A INPUT -m mac --mac-source %s -j DROP" % (mac_address)
+        block_command =  mbc % (mac_address)
         command_executer = os.system(block_command)
         save_command = "service iptables save"
         command_executer = os.system(save_command)
+        print colored("Device %s is blocked" % (mac_address), 'red')
     else:
-        unblock_command = "iptables -I INPUT -m mac --mac-source %s -j ACCEPT" % (mac_address) 
+        unblock_command =  muc % (mac_address) 
         command_executer = os.system(unblock_command) 
         save_command = "service iptables save"
         command_executer = os.system(save_command)
+        print colored("Device %s is unblocked" % (mac_address), 'blue')
 
 def url_blocker_and_unblocker(url, block=None):
     if block:
@@ -56,11 +61,13 @@ def url_blocker_and_unblocker(url, block=None):
         command_executer = os.system(block_command)
         save_command = "service iptables save"
         command_executer = os.system(save_command)
+        print colored("url %s is blocked" % (url), 'red')
     else:
         unblock_command = "" % (url) 
         command_executer = os.system(unblock_command) 
         save_command = "service iptables save"
         command_executer = os.system(save_command)  
+        print colored("url %s is unblocked" % (url), 'blue')
 
 def device_details_listouter():
     command = "arp"
