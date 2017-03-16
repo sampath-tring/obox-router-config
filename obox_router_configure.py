@@ -2,29 +2,29 @@ import os
 import argparse
 import subprocess
 from commands import ip_block_command as ibc, ip_unblock_command as inc, mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, url_unblock_command as uuc
+from paths import WIFI_ACCESS_POINT as wap
 from termcolor import colored
-
-MAC_ADDRESS_LIST = []
-
-IP_ADDRESS_LIST = []
-
-URL_LIST = []
 
 #getting ipaddress, macaddress, url
 parser = argparse.ArgumentParser()
+
+
 
 parser.add_argument('-ip', '--ip', help="IP address", required=False)
 parser.add_argument('-mac', '--mac', help="MAC address", required=False)
 parser.add_argument('-url', '--url', help="URL", required=False)
 parser.add_argument('-b', '--b', help="block", required=False, action='store_true')
 parser.add_argument('-details', '--details', help="lisout existing device", required=False, action='store_true')
+parser.add_argument('-reset', '--reset', help="Factory reset", required=False, action='store_true')
+
 arguments = parser.parse_args()
 
 ip_address = arguments.ip
 mac_address = arguments.mac
 url = arguments.url
-block =arguments.b
+block = arguments.b
 device_details = arguments.details
+factory_reset = arguments.reset
 
 def ip_address_blocker_and_unblocker(ip_address, block=None):
     if block:
@@ -71,7 +71,15 @@ def url_blocker_and_unblocker(url, block=None):
 
 def device_details_listouter():
     command = "arp"
-    command_executer = subprocess.call(command)         
+    command_executer = subprocess.call(command)      
+
+def access_point_vanisher():
+    for file in os.listdir(wap):
+        file_path = os.path.join(wap, file)
+        os.unlink(file_path)
+        print colored("access point %s has been removed" % (file), 'red')       
+
+
 
 
 if __name__ == "__main__":
@@ -83,5 +91,7 @@ if __name__ == "__main__":
         url_blocker_and_unblocker(url, block)        
     if device_details:
         device_details_listouter()
+    if factory_reset:
+        access_point_vanisher()    
 
 
