@@ -3,6 +3,7 @@ import re
 import itertools
 import argparse
 import subprocess
+from tabulate import tabulate
 from commands import ip_block_command as ibc, ip_unblock_command as inc, \
 mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, \
 url_unblock_command as uuc
@@ -101,13 +102,6 @@ def access_point_vanisher():
         os.unlink(file_path)
         print colored("access point %s has been removed" % (file), 'red')  
 
-def vpn_vanisher():
-    for file in os.listdir(vpn):
-        file_path = os.path.join(vpn, file)
-        os.unlink(file_path)
-        print colored("vpn %s has been removed") % (file), 'red')     
-
-def black_list_remover():
 
 
 
@@ -120,7 +114,7 @@ if __name__ == "__main__":
     if url:
         url_blocker_and_unblocker(url, block)        
     if device_details:
-        device_details_listouter()
+        device_details()
     if factory_reset:
         access_point_vanisher() 
         vpn_vanisher()   
