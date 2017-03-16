@@ -6,7 +6,7 @@ import subprocess
 from tabulate import tabulate
 from commands import ip_block_command as ibc, ip_unblock_command as inc, \
 mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, \
-url_unblock_command as uuc
+url_unblock_command as uuc, wifi_access_killer as wak
 from paths import WIFI_ACCESS_POINT as wap, DHCP_LEASE_FILE as dlf
 from termcolor import colored
 
@@ -97,13 +97,12 @@ def device_details():
     print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
     
 def access_point_vanisher():
+    command = wak
+    os.system(command)
     for file in os.listdir(wap):
         file_path = os.path.join(wap, file)
         os.unlink(file_path)
         print colored("access point %s has been removed" % (file), 'red')  
-
-
-
 
 
 if __name__ == "__main__":
@@ -117,6 +116,6 @@ if __name__ == "__main__":
         device_details()
     if factory_reset:
         access_point_vanisher() 
-        vpn_vanisher()   
+        
 
 
