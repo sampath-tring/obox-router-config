@@ -102,7 +102,13 @@ def access_point_vanisher():
     for file in os.listdir(wap):
         file_path = os.path.join(wap, file)
         os.unlink(file_path)
-        print colored("access point %s has been removed" % (file), 'red')  
+        print colored("previously connected access point cleared", 'red')  
+
+def connected_device_vanisher():
+    for file in os.listdir(dlf):
+        file_path = os.path.join(dlf, file)
+        os.unlink(file_path)
+        print colored("previously connected devices cleared", 'red')        
 
 
 if __name__ == "__main__":
@@ -116,6 +122,7 @@ if __name__ == "__main__":
         device_details()
     if factory_reset:
         access_point_vanisher() 
+        connected_device_vanisher()
         
 
 
