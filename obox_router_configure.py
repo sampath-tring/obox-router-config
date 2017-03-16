@@ -1,14 +1,16 @@
 import os
+import re
+import itertools
 import argparse
 import subprocess
-from commands import ip_block_command as ibc, ip_unblock_command as inc, mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, url_unblock_command as uuc
-from paths import WIFI_ACCESS_POINT as wap
+from commands import ip_block_command as ibc, ip_unblock_command as inc, \
+mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, \
+url_unblock_command as uuc
+from paths import WIFI_ACCESS_POINT as wap, DHCP_LEASE_FILE as dlf
 from termcolor import colored
 
 #getting ipaddress, macaddress, url
 parser = argparse.ArgumentParser()
-
-
 
 parser.add_argument('-ip', '--ip', help="IP address", required=False)
 parser.add_argument('-mac', '--mac', help="MAC address", required=False)
@@ -69,15 +71,43 @@ def url_blocker_and_unblocker(url, block=None):
         command_executer = os.system(save_command)  
         print colored("url %s is unblocked" % (url), 'blue')
 
-def device_details_listouter():
-    command = "arp"
-    command_executer = subprocess.call(command)      
-
+def device_details():
+    file_opener = open(dlf, "rb")
+    file_reader = file_opener.readlines()
+    ip_address_list = []
+    mac_address_list = []
+    binding_list = []
+    hostname_list = []
+    for line in file_reader:
+        if "lease " in line and "#" not in line:
+            ip_address_list.append(line.replace("lease ", "").replace("{","").replace("\n", ""))
+        if "hardware ethernet" in line:
+            mac_address_list.append(line.replace("hardware ethernet ", "").replace(";", "").replace("\n", ""))
+        if "binding state" in line and "next" not in line and "rewind" not in line:
+            binding_list.append(line.replace("binding state", "").replace(";", "").replace("\n", ""))
+        # if "client-hostname" in line:
+        #   hostname_list.append(line.replace("client-hostname ","").replace(";","").replace('"', ''))  
+    listed_value = [list(values) for values in zip(ip_address_list,mac_address_list, binding_list)]
+    listed_value_wo_duplicates = list(listed_value for listed_value,_ in itertools.groupby(listed_value))
+    final_details_list = []
+    for data in listed_value_wo_duplicates:
+        final_details_list.append(data) if "   free" not in data[2] else ""
+    
+    print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
+    
 def access_point_vanisher():
     for file in os.listdir(wap):
         file_path = os.path.join(wap, file)
         os.unlink(file_path)
-        print colored("access point %s has been removed" % (file), 'red')       
+        print colored("access point %s has been removed" % (file), 'red')  
+
+def vpn_vanisher():
+    for file in os.listdir(vpn):
+        file_path = os.path.join(vpn, file)
+        os.unlink(file_path)
+        print colored("vpn %s has been removed") % (file), 'red')     
+
+def black_list_remover():
 
 
 
@@ -92,6 +122,7 @@ if __name__ == "__main__":
     if device_details:
         device_details_listouter()
     if factory_reset:
-        access_point_vanisher()    
+        access_point_vanisher() 
+        vpn_vanisher()   
 
 

@@ -1,4 +1,5 @@
 
-#WIFI_ACCESS_POINT = '/etc/NetworkManager/system-connections' 
+WIFI_ACCESS_POINT = '/etc/hostapd/'
 
-WIFI_ACCESS_POINT = "/home/sampath/demo/"
+DHCP_LEASE_FILE = '/var/lib/dhcp/dhcpd.leases' 
+
