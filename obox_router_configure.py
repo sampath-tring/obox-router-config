@@ -145,6 +145,8 @@ if __name__ == "__main__":
     if factory_reset:
         access_point_vanisher() 
         connected_device_vanisher()
+    if dhcp:
+        dhcp_enabler_and_disabler(dhcp_enable)
     
                 
         
