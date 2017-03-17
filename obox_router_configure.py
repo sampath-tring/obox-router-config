@@ -7,7 +7,7 @@ from tabulate import tabulate
 from commands import ip_block_command as ibc, ip_unblock_command as inc, \
 mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, \
 url_unblock_command as uuc, wifi_access_killer as wak
-from paths import WIFI_ACCESS_POINT as wap, DHCP_LEASE_FILE as dlf
+from paths import WIFI_ACCESS_POINT as wap, DHCP_LEASE_FILE as dlf, DHCP_LEASE_FILE_PATH as dlfp
 from termcolor import colored
 
 #getting ipaddress, macaddress, url
@@ -105,8 +105,8 @@ def access_point_vanisher():
         print colored("previously connected access point cleared", 'red')  
 
 def connected_device_vanisher():
-    for file in os.listdir(dlf):
-        if file.endswith(".leases")
+    for file in os.listdir(dlfp):
+        if file.endswith(".leases"):
             file_path = os.path.join(dlf, file)
             os.unlink(file_path)
             print colored("previously connected devices cleared", 'red')        
