@@ -83,7 +83,8 @@ def url_blocker_and_unblocker(url, block=None):
         print colored("url %s is unblocked" % (url), 'blue')
 
 def device_details():
-    file_opener = open(dlf, "rb")
+    if dlf is not None:
+        file_opener = open(dlf, "rb")
     file_reader = file_opener.readlines()
     ip_address_list = []
     mac_address_list = []
