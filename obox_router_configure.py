@@ -85,27 +85,27 @@ def url_blocker_and_unblocker(url, block=None):
 def device_details():
     if dlf is not None:
         file_opener = open(dlf, "rb")
-    file_reader = file_opener.readlines()
-    ip_address_list = []
-    mac_address_list = []
-    binding_list = []
-    hostname_list = []
-    for line in file_reader:
-        if "lease " in line and "#" not in line:
-            ip_address_list.append(line.replace("lease ", "").replace("{","").replace("\n", ""))
-        if "hardware ethernet" in line:
-            mac_address_list.append(line.replace("hardware ethernet ", "").replace(";", "").replace("\n", ""))
-        if "binding state" in line and "next" not in line and "rewind" not in line:
-            binding_list.append(line.replace("binding state", "").replace(";", "").replace("\n", ""))
+        file_reader = file_opener.readlines()
+        ip_address_list = []
+        mac_address_list = []
+        binding_list = []
+        hostname_list = []
+        for line in file_reader:
+            if "lease " in line and "#" not in line:
+                ip_address_list.append(line.replace("lease ", "").replace("{","").replace("\n", ""))
+            if "hardware ethernet" in line:
+                mac_address_list.append(line.replace("hardware ethernet ", "").replace(";", "").replace("\n", ""))
+            if "binding state" in line and "next" not in line and "rewind" not in line:
+                binding_list.append(line.replace("binding state", "").replace(";", "").replace("\n", ""))
         # if "client-hostname" in line:
         #   hostname_list.append(line.replace("client-hostname ","").replace(";","").replace('"', ''))  
-    listed_value = [list(values) for values in zip(ip_address_list,mac_address_list, binding_list)]
-    listed_value_wo_duplicates = list(listed_value for listed_value,_ in itertools.groupby(listed_value))
-    final_details_list = []
-    for data in listed_value_wo_duplicates:
-        final_details_list.append(data) if "   free" not in data[2] else ""
+            listed_value = [list(values) for values in zip(ip_address_list,mac_address_list, binding_list)]
+            listed_value_wo_duplicates = list(listed_value for listed_value,_ in itertools.groupby(listed_value))
+            final_details_list = []
+        for data in listed_value_wo_duplicates:
+            final_details_list.append(data) if "   free" not in data[2] else ""
     
-    print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
+        print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
 
 #reset    
 def access_point_vanisher():
