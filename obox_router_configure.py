@@ -6,7 +6,8 @@ import subprocess
 from tabulate import tabulate
 from commands import ip_block_command as ibc, ip_unblock_command as inc, \
 mac_block_command as mbc, mac_unblock_command as muc, url_block_command as ubc, \
-url_unblock_command as uuc, wifi_access_killer as wak
+url_unblock_command as uuc, wifi_access_killer as wak, dhcp_enable_command as dec, \
+dhcp_disable_command as ddc
 from paths import WIFI_ACCESS_POINT as wap, DHCP_LEASE_FILE as dlf, DHCP_LEASE_FILE_PATH as dlfp
 from termcolor import colored
 
@@ -18,6 +19,11 @@ parser.add_argument('-mac', '--mac', help="MAC address", required=False)
 parser.add_argument('-url', '--url', help="URL", required=False)
 parser.add_argument('-b', '--b', help="block", required=False, action='store_true')
 parser.add_argument('-details', '--details', help="lisout existing device", required=False, action='store_true')
+#dhcp
+parser.add_argument('-dhcp', '--dhcp', help="dhcp", required=False, action='store_true')
+parser.add_argument('-enable', '--enable', help="dhcp enable", required=False, action='store_true')
+parser.add_argument('-disable', '--disable', help="dhcp disable", required=False, action='store_true')
+
 parser.add_argument('-reset', '--reset', help="Factory reset", required=False, action='store_true')
 
 arguments = parser.parse_args()
@@ -28,6 +34,10 @@ url = arguments.url
 block = arguments.b
 device_details = arguments.details
 factory_reset = arguments.reset
+#dhcp
+dhcp = arguments.dhcp
+dhcp_enable = arguments.enable
+dhcp_disable = arguments.disable
 
 def ip_address_blocker_and_unblocker(ip_address, block=None):
     if block:
@@ -95,7 +105,8 @@ def device_details():
         final_details_list.append(data) if "   free" not in data[2] else ""
     
     print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
-    
+
+#reset    
 def access_point_vanisher():
     command = wak
     os.system(command)
@@ -106,10 +117,20 @@ def access_point_vanisher():
 
 def connected_device_vanisher():
     for file in os.listdir(dlfp):
-        if file.endswith(".leases"):
-            file_path = os.path.join(dlf, file)
+        if "dhcpd.leases" in file:
+            file_path = os.path.join(dlfP, file)
             os.unlink(file_path)
-            print colored("previously connected devices cleared", 'red')        
+            print colored("previously connected devices cleared", 'red')   
+
+#dhcp
+def dhcp_enabler_and_disabler(enable=None):
+    if enable:
+        os.system(dec)
+        print colored("DHCP enabled", 'blue')
+    else:
+        os.system(ddc)    
+        print colored("DHCP disabled", 'red')
+
 
 
 if __name__ == "__main__":
@@ -124,6 +145,8 @@ if __name__ == "__main__":
     if factory_reset:
         access_point_vanisher() 
         connected_device_vanisher()
+    
+                
         
 
 
