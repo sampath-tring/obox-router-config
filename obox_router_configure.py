@@ -83,7 +83,7 @@ def url_blocker_and_unblocker(url, block=None):
         print colored("url %s is unblocked" % (url), 'blue')
 
 def device_details():
-    if dlf is not None:
+    if os.path.exists(dlf):
         file_opener = open(dlf, "rb")
         file_reader = file_opener.readlines()
         ip_address_list = []
@@ -105,7 +105,9 @@ def device_details():
         for data in listed_value_wo_duplicates:
             final_details_list.append(data) if "   free" not in data[2] else ""
     
-        print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List'])    
+        print tabulate(final_details_list, headers = ['Ipaddress', 'Macaddress', 'Binding List']) 
+    else:
+        print "Dhcp lease file not found..."       
 
 #reset    
 def access_point_vanisher():
